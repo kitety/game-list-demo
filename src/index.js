@@ -16,12 +16,10 @@ ReactDOM.render(
     <Router>
       <div className="ui container">
         <div className="ui three item menu">
+        {/* NavLink跟a类似 */}
           <NavLink exact activeClassName="active" className="item" to="/">Home</NavLink>
           <NavLink exact activeClassName="active" className="item" to="/games">Games</NavLink>
           <NavLink exact activeClassName="active" className="item" to="/games/new">Add New Games</NavLink>
-          {/*   <a href="#" className="item">Home</a>
-          <a href="#" className="item">Games</a>
-          <a href="#" className="item">Add New Games</a> */}
         </div>
         <Route exact path="/" component={App} />
         <Route exact path="/games" component={GamesPage} />
