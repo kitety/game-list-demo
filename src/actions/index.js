@@ -5,6 +5,15 @@ const setGames = (games) => {
     games
   }
 }
+const handleRequest = (response) => {
+  if (response.ok) {
+    return response.json()
+  } else {
+    let error = new Error(response.StatusText)
+    error.response = response
+    throw error
+  }
+}
 export const fetchGames = () => {
   // 返回函数 fetch不加参数默认get方法
   return dispatch => {
@@ -15,13 +24,13 @@ export const fetchGames = () => {
 }
 export const saveGame = (data) => {
   return dispatch => {
-    fetch('/api/games', {
+    return fetch('/api/games', {
       method: 'POST',
       //数据序列化
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "appication/json"
       }
-    })
+    }).then(handleRequest)
   }
 }

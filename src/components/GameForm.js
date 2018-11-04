@@ -14,14 +14,12 @@ class GameForm extends Component {
   handChange = (e) => {
     let errors = Object.assign({}, this.state.errors)
     if (!!errors[e.target.name]) {
-      console.log(1);
       delete errors[e.target.name]
       this.setState({
         [e.target.name]: e.target.value,
         errors
       })
     } else {
-      console.log(0)
       this.setState({
         [e.target.name]: e.target.value
       })
@@ -42,13 +40,23 @@ class GameForm extends Component {
       this.setState({
         isLoading: true
       })
-      this.props.saveGame({ cover, title });
+      this.props.saveGame({ cover, title }).then(
+        () => { },
+        (err) => err.response.json().then(({ errors }) => {
+          console.log(errors)
+          this.setState({
+            isLoading: false,
+            errors
+          })
+        })
+      )
     }
   };
   render() {
     return (
       <form className={classnames('ui', 'form', { 'loading': !!this.state.isLoading })} onSubmit={this.handSubmit} >
         <h1>Add new Game</h1>
+        {!!this.state.errors.global && <div className=" ui message negative">{this.state.errors.global}</div>}
         <div className={classnames("field", { 'error': !!this.state.errors.title })}>
           <label htmlFor="title">Title</label>
           <input
