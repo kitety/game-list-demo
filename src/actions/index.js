@@ -29,7 +29,7 @@ export const saveGame = (data) => {
       //数据序列化
       body: JSON.stringify(data),
       headers: {
-        "Content-Type": "appication/json"
+        "Content-Type": "application/json"
       }
     }).then(handleRequest)
   }
