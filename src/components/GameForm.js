@@ -7,8 +7,9 @@ import { Redirect } from 'react-router-dom'
 class GameForm extends Component {
   // 初始化数据
   state = {
-    title: '',
-    cover: '',
+    title: this.props.game ? this.props.game.title : '',
+    _id: this.props.game ? this.props.game._id : null,
+    cover: this.props.game ? this.props.game.cover : '',
     errors: {},
     isLoading: null,
     done: false
@@ -19,6 +20,14 @@ class GameForm extends Component {
     if (match.params._id) {
       this.props.fetchGame(match.params._id)
     }
+  }
+  componentWillReceiveProps(nextProps) {
+    // 这个很需要 因为刚开始的时候是异步的
+    this.setState({
+      _id: nextProps.game._id,
+      title: nextProps.game.title,
+      cover: nextProps.game.cover
+    })
   }
   handChange = (e) => {
     let errors = Object.assign({}, this.state.errors)
@@ -68,7 +77,7 @@ class GameForm extends Component {
         <input
           type="text"
           name="title"
-          value={this.state.text}
+          value={this.state.title}
           onChange={this.handChange}
         />
         <span>{this.state.errors.title}</span>
@@ -98,5 +107,15 @@ class GameForm extends Component {
     );
   }
 }
+const mapStateToProps = (state, props) => {
+  const { match } = props
+  if (match.params._id) {
+    return {
+      game: state.games.find(item => item._id === match.params._id)
+    }
+  } else {
+    return { game: null };
+  }
+}
 
-export default connect(null, { saveGame, fetchGame })(GameForm);
+export default connect(mapStateToProps, { saveGame, fetchGame })(GameForm);
