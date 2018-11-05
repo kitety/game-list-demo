@@ -14,9 +14,9 @@ class GameForm extends Component {
     done: false
   }
   componentDidMount() {
-    console.log(this.props);
     const { match } = this.props
-    if (match.params._id !== 'new') {
+    // /:_id 才会有 match.params._id
+    if (match.params._id) {
       this.props.fetchGame(match.params._id)
     }
   }

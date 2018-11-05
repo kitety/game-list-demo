@@ -1,4 +1,4 @@
-import { SET_GAMES, ADD_GAME,GEMA_FETCHED } from '../constants';
+import { SET_GAMES, ADD_GAME, GEMA_FETCHED } from '../constants';
 const setGames = (games) => {
   return {
     type: SET_GAMES,
@@ -31,14 +31,15 @@ export const fetchGames = () => {
   return dispatch => {
     fetch('/api/games')
       .then(res => res.json())
-      .then(data => dispatch(gameFetched(data.game)))
+      .then(data => dispatch(setGames(data.games)))
+
   }
 }
 export const fetchGame = (id) => {
   return dispatch => {
-    fetch(`/api/game/&{id}`)
+    fetch(`/api/game/${id}`)
       .then(res => res.json())
-      .then(data => dispatch(setGames(data.games)))
+      .then(data => dispatch(gameFetched(data.game)))
   }
 }
 export const saveGame = (data) => {

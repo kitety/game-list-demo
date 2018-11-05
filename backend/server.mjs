@@ -24,6 +24,11 @@ mongodb.MongoClient.connect(dbURL, { useNewUrlParser: true }, (err, client) => {
       res.json({ games })
     })
   })
+  app.get('/api/game/:_id', (req, res) => {
+    db.collection('games').findOne({ _id: new mongodb.ObjectId(req.params._id) }, (err, game) => {
+      res.json({ game })
+    })
+  })
   app.post('/api/games', (req, res) => {
     const { errors, isValid } = validData(req.body)
     if (isValid) {
@@ -37,11 +42,7 @@ mongodb.MongoClient.connect(dbURL, { useNewUrlParser: true }, (err, client) => {
           res.json({ games: result.ops[0] })
         }
       })
-      app.get('/api/game/:_id', (req, res) => {
-        db.collection('games').findOne({ _id: new mongodb.ObjectId(req.params._id) }, (err, game) => {
-          res.json({ game })
-        })
-      })
+     
     } else {
       res.status(400).json({ errors })
     }
