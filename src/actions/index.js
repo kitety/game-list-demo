@@ -1,4 +1,4 @@
-import { SET_GAMES, ADD_GAME } from '../constants';
+import { SET_GAMES, ADD_GAME,GEMA_FETCHED } from '../constants';
 const setGames = (games) => {
   return {
     type: SET_GAMES,
@@ -14,9 +14,15 @@ const handleRequest = (response) => {
     throw error
   }
 }
+const gameFetched = (game) => {
+  return {
+    type: GEMA_FETCHED,
+    game
+  }
+}
 const AddGame = (game) => {
-  return{
-    type:ADD_GAME,
+  return {
+    type: ADD_GAME,
     game
   }
 }
@@ -24,6 +30,13 @@ export const fetchGames = () => {
   // 返回函数 fetch不加参数默认get方法
   return dispatch => {
     fetch('/api/games')
+      .then(res => res.json())
+      .then(data => dispatch(gameFetched(data.game)))
+  }
+}
+export const fetchGame = (id) => {
+  return dispatch => {
+    fetch(`/api/game/&{id}`)
       .then(res => res.json())
       .then(data => dispatch(setGames(data.games)))
   }

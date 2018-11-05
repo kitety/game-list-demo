@@ -35,22 +35,27 @@ mongodb.MongoClient.connect(dbURL, { useNewUrlParser: true }, (err, client) => {
           })
         } else {
           res.json({ games: result.ops[0] })
+        }
+      })
+      app.get('/api/game/:_id', (req, res) => {
+        db.collection('games').findOne({ _id: new mongodb.ObjectId(req.params._id) }, (err, game) => {
+          res.json({ game })
+        })
+      })
+    } else {
+      res.status(400).json({ errors })
     }
   })
-} else {
-    res.status(400).json({ errors })
-  }
+  // 匹配不到执行这里
+  app.use((req, res) => {
+    res.status(404).json({
+      errors: {
+        global: 'Still Working on it.Please try again later than when we implement it'
+      }
+    })
   })
-// 匹配不到执行这里
-app.use((req, res) => {
-  res.status(404).json({
-    errors: {
-      global: 'Still Working on it.Please try again later than when we implement it'
-    }
-  })
-})
 
-app.listen(8080, () => {
-  console.log('The server is listening on: 8080!');
-})
+  app.listen(8080, () => {
+    console.log('The server is listening on: 8080!');
+  })
 })
