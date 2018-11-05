@@ -1,7 +1,10 @@
 import express from 'express'
 import mongodb from 'mongodb';
 import bodyParser from 'body-parser'
-// const express = require('express') es6的兼容
+// 调试的时候引用
+// const express = require('express')
+// const mongodb = require('mongodb')
+// const bodyParser = require('body-parser')
 var app = new express()
 app.use(bodyParser.json()); // 中间件方法
 const dbURL = 'mongodb://localhost'
@@ -29,6 +32,23 @@ mongodb.MongoClient.connect(dbURL, { useNewUrlParser: true }, (err, client) => {
       res.json({ game })
     })
   })
+  app.put('/api/games/:_id', (req, res) => {
+    const { errors, isValid } = validData(req.body)
+    if (isValid) {
+      const { title, cover } = req.body
+      db.collection('games').findOneAndUpdate(
+        { _id: new mongodb.ObjectId(req.params._id) },
+        { $set: { title, cover } },
+        { returnOriginal: false },
+        (err, result) => {
+          if (err) { res.status(500).json({ errors: { global: err } }); return }
+          res.json({ game: result.value })
+        }
+      )
+    } else {
+      res.status(400).json({ errors })
+    }
+  })
   app.post('/api/games', (req, res) => {
     const { errors, isValid } = validData(req.body)
     if (isValid) {
@@ -42,7 +62,7 @@ mongodb.MongoClient.connect(dbURL, { useNewUrlParser: true }, (err, client) => {
           res.json({ games: result.ops[0] })
         }
       })
-     
+
     } else {
       res.status(400).json({ errors })
     }
