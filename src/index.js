@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/App';
 import GamesPage from './components/GamesPage';
-import GameForm from './components/GameForm';
+import GameFormPage from './components/GameFormPage';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import * as serviceWorker from './serviceWorker';
@@ -25,8 +25,8 @@ ReactDOM.render(
         </div>
         <Route exact path="/" component={App} />
         <Route exact path="/games" component={GamesPage} />
-        <Route  path="/games/new" component={GameForm} />
-        <Route  path="/game/:_id" component={GameForm} />
+        <Route  path="/games/new" component={GameFormPage} />
+        <Route  path="/game/:_id" component={GameFormPage} />
       </div>
     </Router>
   </Provider>,
