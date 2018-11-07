@@ -1,4 +1,4 @@
-import { SET_GAMES, ADD_GAME, GEMA_FETCHED, GAME_UPDATE } from '../constants';
+import { SET_GAMES, ADD_GAME, GAME_FETCHED, GAME_UPDATE, GAME_DELETE } from '../constants';
 const setGames = (games) => {
   return {
     type: SET_GAMES,
@@ -16,7 +16,7 @@ const handleRequest = (response) => {
 }
 const gameFetched = (game) => {
   return {
-    type: GEMA_FETCHED,
+    type: GAME_FETCHED,
     game
   }
 }
@@ -73,6 +73,25 @@ export const updateGame = (data) => {
       }
     }).then(handleRequest).then(data => {
       dispatch(updateGameHandler(data.game))
+    })
+  }
+}
+export const gameDelete = (gameId) => {
+  return {
+    type: GAME_DELETE,
+    gameId
+  }
+
+}
+export const deleteGame = (id) => {
+  return dispatch => {
+    return fetch(`/api/game/${id}`, {
+      method: 'delete',
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }).then(handleRequest).then(data => {
+      dispatch(gameDelete(id))
     })
   }
 }

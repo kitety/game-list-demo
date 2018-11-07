@@ -1,4 +1,4 @@
-import { SET_GAMES, ADD_GAME, GEMA_FETCHED, GAME_UPDATE } from '../constants';
+import { SET_GAMES, ADD_GAME, GAME_FETCHED, GAME_UPDATE, GAME_DELETE } from '../constants';
 const games = (state = [], action = {}) => {
   switch (action.type) {
     case SET_GAMES:
@@ -8,7 +8,7 @@ const games = (state = [], action = {}) => {
         ...state,
         action.game
       ]
-    case GEMA_FETCHED:
+    case GAME_FETCHED:
       const index = state.findIndex(item => item._id === action.game._id)
       // index大于-1 找得到
       if (index > -1) {
@@ -33,6 +33,10 @@ const games = (state = [], action = {}) => {
         } else {
           return item
         }
+      })
+    case GAME_DELETE:
+      return state.filter(item => {
+        return item._id !== action.gameId
       })
     default:
       return state;
